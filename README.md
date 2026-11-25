@@ -24,10 +24,8 @@ Simplicity is a caller precondition. The library checks the vertex count, adjace
 
 ## Scaling
 
-![Median microseconds per vertex for Chazelle submaps and a comparison sweep on convex, star and comb polygons](bench/scaling.svg)
+![Median microseconds per vertex for Chazelle submaps and a comparison sweep on convex, star and comb polygons from 128 to 1,048,576 vertices](bench/scaling.svg)
 
-Both paths include triangle extraction. Each panel has its own vertical scale. From 16,384 to 131,072 vertices on the star input, time per vertex grew from 15.6 to 19.2 µs for submaps and from 0.46 to 0.61 µs for the O(n log n) AVL sweep. The sweep was faster throughout this experiment. Timings illustrate finite-size scaling. The worst-case O(n) bound follows from the operation counts in [DEVIATIONS.md](DEVIATIONS.md).
-
-In a separate single-run check on larger stars, submap time was 21.4 µs per vertex at 524,288 vertices and 21.2 µs at 1,048,576. The larger run used 3.4 GiB of peak resident memory.
+Both panels include triangle extraction and have separate vertical scales. On star polygons, doubling from 524,288 to 1,048,576 vertices raised median time per vertex from 20.3 to 20.7 µs for submaps and from 0.78 to 0.91 µs for the O(n log n) AVL sweep. A separate submap run on the million-vertex star used 3.4 GiB of peak resident memory. The worst-case O(n) bound is derived in [DEVIATIONS.md](DEVIATIONS.md).
 
 Reproduce the [raw medians](bench/scaling.csv) with `cargo run --release --example scaling > bench/scaling.csv`. Run `python3 bench/plot.py` with Matplotlib installed to redraw the chart. The chart uses Rust 1.100 on one Cortex-X925 core, one warmup, and five timed runs per point.

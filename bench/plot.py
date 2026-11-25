@@ -21,7 +21,7 @@ for panel, key, title in zip(axes, ["submap_ns", "sweep_ns"],
         panel.plot(vertices, per_vertex, marker=symbol, markersize=4, color=color,
                    label=family.capitalize(), linewidth=1.8)
     panel.set_xscale("log", base=2)
-    panel.set_xticks([128, 1024, 8192, 65536])
+    panel.set_xticks([128, 1024, 8192, 65536, 1048576])
     panel.xaxis.set_major_formatter(FuncFormatter(lambda x, _: f"{int(x):,}"))
     panel.yaxis.set_major_locator(MaxNLocator(nbins=5))
     panel.set_ylim(bottom=0)
