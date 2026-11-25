@@ -4,6 +4,13 @@ A Rust implementation of Chazelle’s deterministic coarse-to-fine visibility al
 
 The implementation uses canonical submaps, two directional fusion walks, separator-based horizontal ray shooting, and Fournier–Montuno triangulation. The separator construction and the scheduling of down-phase cuts differ from the published procedures. The bounds and counterexamples are in [DEVIATIONS.md](DEVIATIONS.md). [Chazelle’s paper](https://www.cs.princeton.edu/~chazelle/pubs/polygon-triang.pdf)
 
+## Triangulations
+
+| Koch snowflake | Hilbert corridor |
+|:---:|:---:|
+| [![Triangulated six-pointed snowflake with recursively serrated edges](docs/figures/koch-snowflake.svg)](docs/figures/koch-snowflake.svg) | [![Triangulated polygon following the right-angle turns of a Hilbert curve](docs/figures/hilbert-corridor.svg)](docs/figures/hilbert-corridor.svg) |
+| 192 vertices · 190 triangles | 412 vertices · 410 triangles |
+
 ## Run
 
 Pass a simple boundary to `chazelle::triangulate(&[Point])`, omitting the repeated closing vertex. The command-line program reads one `x y` pair per line and writes zero-based triangle indices.
@@ -21,4 +28,6 @@ Simplicity is a caller precondition. The library checks the vertex count, adjace
 
 Both paths include triangle extraction. Each panel has its own vertical scale. From 16,384 to 131,072 vertices on the star input, time per vertex grew from 15.6 to 19.2 µs for submaps and from 0.46 to 0.61 µs for the O(n log n) AVL sweep. The sweep was faster throughout this experiment. Timings illustrate finite-size scaling. The worst-case O(n) bound follows from the operation counts in [DEVIATIONS.md](DEVIATIONS.md).
 
-Reproduce the [raw medians](bench/scaling.csv) with `cargo run --release --example scaling > bench/scaling.csv`. Run `python3 bench/plot.py` with Matplotlib installed to redraw the chart. The recorded run used Rust 1.100 on one Cortex-X925 core, one warmup, and five timed runs per point.
+In a separate single-run check on larger stars, submap time was 21.4 µs per vertex at 524,288 vertices and 21.2 µs at 1,048,576. The larger run used 3.4 GiB of peak resident memory.
+
+Reproduce the [raw medians](bench/scaling.csv) with `cargo run --release --example scaling > bench/scaling.csv`. Run `python3 bench/plot.py` with Matplotlib installed to redraw the chart. The chart uses Rust 1.100 on one Cortex-X925 core, one warmup, and five timed runs per point.
